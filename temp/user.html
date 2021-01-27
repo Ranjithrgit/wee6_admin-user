@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<h2>User Registeration</h2>
+
+<form>
+
+  <div class="container">
+    <label for="uname"><b>Firstname</b></label>
+    <input type="text" placeholder="Enter Firstname" id="firstname">
+
+    <label for="psw"><b>Lastname</b></label>
+    <input type="text" placeholder="Enter Lastname" id="lastname" >
+
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter username" id="username">
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter password" id="password">
+
+    <label for="psw"><b>Confirm Password</b></label>
+    <input type="password" placeholder="Confirm password" id="confirmpass">
+        <span id="span"></span><br>
+    <button type="button" id="btn">Create</button>
+   
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    
+  </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script>
+  $('#btn').click(function(){
+    var firstname = $('#firstname').val()
+    var lastname = $('#lastname').val()
+    var username = $('#username').val()
+    var password = $('#password').val()
+    var confirmpass = $('#confirmpass').val()
+    data={
+      'csrfmiddlewaretoken':'{{csrf_token}}',
+      'firstname':firstname,
+      'lastname':lastname,
+      'username':username,
+      'password':password
+    }
+  if(firstname.length <=3 || firstname.length >=15){
+    $('#span').html('<h5>Enter valid firstname!!</h5>')
+  }
+  else if(lastname.length  <= 3 || lastname.length >=15){
+    $('#span').html('<h5>Enter lastname</h5>')
+  }
+  else if(username.length <=3 || username.length >=15){
+    $('#span').html('<h5>Enter username</h5>')
+  }
+  else if(password==''||confirmpass==''){
+    $('#span').html('<h5>fill password</h5>')
+  }else if(password!=confirmpass){
+    $('#span').html('<h5>confirm password again</h5>')
+  }else{
+
+    $.ajax({
+      url:'/signup/',
+      method:"POST",
+      data:data,
+      dataType:'json',
+      success:function(data){
+        if(data =='true'){
+          alert('request submitted')
+          window.location.replace('/')
+      }
+        if(data =='user'){
+          $('#span').html('<h5>Username already taken!</h5>')
+        } 
+      }
+    })
+  }
+  
+  })
+</script>
+</body>
+</html>
